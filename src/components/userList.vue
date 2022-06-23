@@ -1,7 +1,7 @@
 <template>
-  <div class="friends">
-    <h3>Список пользователей</h3>
-    <b @click="openDialog(i.login)" v-show="i.login !== login" v-for="i in userList">{{i.login}}</b>
+  <div :class="{'d-friend': isDark}" class="friends">
+    <h3 :class="{'d-h3': isDark}">Список пользователей</h3>
+    <b :class="{'d-b': isDark}" @click="openDialog(i.login)" v-show="i.login !== login" v-for="i in userList">{{i.login}}</b>
   </div>
 </template>
 
@@ -14,6 +14,9 @@ export default {
       login: "",
     }
   },
+  props: {
+    isDark: Boolean
+  },
   methods: {
     async getUserList() {
       const res = await fetch('https://serene-spire-46051.herokuapp.com/api/users');
@@ -25,6 +28,7 @@ export default {
     },
     openDialog(wing) {
       this.$emit('openDialog', {wingman: wing});
+      localStorage['lastDialog'] = wing;
     },
     exit() {
       this.$emit('exit');
@@ -33,6 +37,9 @@ export default {
   async mounted() {
     this.login = localStorage['login'];
     setTimeout(() => this.getUserList());
+    if (localStorage['lastDialog']) {
+      this.openDialog(localStorage['lastDialog']);
+    }
   }
 }
 </script>
@@ -69,9 +76,20 @@ b {
   transform: translate(-50%);
   box-shadow: 0 4px 12px 0 #0d234308;
 }
+.d-friend {
+  background-color: #2c2c2c;
+}
+.d-h3 {
+  color: #949494;
+}
+.d-b {
+  background-color: black;
+  color: #949494;
+}
 b:hover {
   transform: translate(5px);
 }
+
 @media screen and (min-width: 700px){
   .friends {
     width: 600px;

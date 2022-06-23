@@ -1,7 +1,9 @@
 <template>
-  <span class="info">
+  <span :class="{'d-info' : isDark}" class="info">
     <b>Здравствуйте, {{login}}</b>
-    <button @click="exit">Выйти</button>
+    <span class="down">
+      <button :class="{'d-btn': isDark}" @click="exit">Выйти</button>
+    </span>
   </span>
 </template>
 
@@ -13,13 +15,16 @@ export default {
       login: ""
     }
   },
+  props: {
+    isDark: Boolean
+  },
   mounted() {
     this.login = localStorage['login'];
   },
   methods: {
     exit() {
       this.$emit('exit');
-    }
+    },
   }
 }
 </script>
@@ -31,7 +36,7 @@ export default {
   top: 0;
   margin: 8px;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 7px;
   background-color: white;
   font-family: Calibri, sans-serif;
   display: flex;
@@ -39,9 +44,18 @@ export default {
   align-items: flex-start;
   box-shadow: 0 4px 12px 0 #0d234308;
 }
+.d-info {
+  color: #949494;
+  background-color: #2c2c2c;
+}
+.d-btn {
+  background-color: #949494;
+}
+.d-btn:hover {
+  background-color: #777777;
+}
 button {
   padding: 3px 6px;
-  margin-top: 8px;
   font-size: 15px;
   border: none;
   background-color: #ffdada;
@@ -53,5 +67,17 @@ button:hover {
 }
 b {
   font-weight: 600;
+}
+.down {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+img {
+  width: 24px;
+  margin-left: 10px;
+  padding: 2px;
+  border-radius: 20px;
 }
 </style>

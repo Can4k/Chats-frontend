@@ -1,21 +1,23 @@
 <template>
   <div id="app">
-    <span class="enter" v-show="!isAuth">
+    <span :class="{'b-e': isBlack}" class="enter" v-show="!isAuth">
        <span class="hello">
-         <h1>{{isAuth? `Привет, ${login}!` : 'Вход'}}</h1>
+         <h1 :class="{'b-h1': isBlack}">{{isAuth? `Привет, ${login}!` : 'Вход'}}</h1>
        </span>
       <span class="inputs">
-        <input v-model="login" placeholder="Логин">
-        <input type="password" v-model="password" placeholder="Пароль">
+        <input :class="{'b-inp': isBlack}" v-model="login" placeholder="Логин">
+        <input :class="{'b-inp': isBlack}" type="password" v-model="password" placeholder="Пароль">
       </span>
       <span class="buttons-container">
-        <button id="enter" @click="enter">Войти</button>
-        <button id="register" @click="register">Зарегестрироваться</button>
+        <button :class="{'b-enter': isBlack}" class="_enter" @click="enter">Войти</button>
+        <button :class="{'b-register': isBlack}" class="register" @click="register">Зарегестрироваться</button>
       </span>
     </span>
-    <user-information @exit="this.exit" v-if="isAuth"/>
-    <chat-dialog @backToList="isDialogOpen = false" v-if="isDialogOpen" :wingman="this.wingman"/>
-    <user-list @openDialog="openDialog" v-if="isAuth && !isDialogOpen"/>
+    <img @click="changeTheme" v-show="this.isBlack" src="@/assets/sun.svg" alt="тема">
+    <img @click="changeTheme" v-show="!this.isBlack" src="@/assets/moon.svg" alt="тема">
+    <user-information @change_theme="changeTheme" :is-dark="isBlack" @exit="this.exit" v-if="isAuth"/>
+    <chat-dialog :is-dark="isBlack" @backToList="backToList" v-if="isDialogOpen" :wingman="this.wingman"/>
+    <user-list :is-dark="isBlack" @openDialog="openDialog" v-if="isAuth && !isDialogOpen"/>
   </div>
 </template>
 
@@ -42,7 +44,8 @@ export default {
       password: "",
       isAuth: false,
       isDialogOpen: false,
-      wingman: ""
+      wingman: "",
+      isBlack: false
     }
   },
   methods: {
@@ -109,8 +112,30 @@ export default {
       this.isAuth = false;
       this.isDialogOpen = false;
     },
+    backToList() {
+      this.isDialogOpen = false;
+      localStorage.removeItem('lastDialog');
+    },
+    changeTheme() {
+      this.isBlack = !this.isBlack;
+      if (this.isBlack) {
+        localStorage['theme'] = 'dark';
+        document.getElementsByTagName('html')[0].style.backgroundColor = 'black';
+      } else {
+        localStorage['theme'] = 'light';
+        document.getElementsByTagName('html')[0].style.backgroundColor = '#f3f3f2';
+      }
+    }
   },
   mounted() {
+    if (localStorage['theme'] === 'dark') {
+      this.isBlack = true;
+      document.getElementsByTagName('html')[0].style.backgroundColor = 'black';
+    } else {
+      localStorage['theme'] = 'light';
+      this.isBlack = false;
+      document.getElementsByTagName('html')[0].style.backgroundColor = '#f3f3f2';
+    }
     if (localStorage['login'] && localStorage['password']) {
       this.isAuth = true;
       this.login = localStorage.login;
@@ -131,6 +156,14 @@ html {
 </style>
 
 <style scoped>
+img {
+  top: 0;  left: 0;
+  margin: 5px;
+  position: absolute;
+  background-color: lightgray;
+  padding: 5px;
+  border-radius: 30px;
+}
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -194,11 +227,11 @@ button {
   justify-content: center;
 }
 
-#register {
+.register {
   background-color: #b9e1ff;
   transition-duration: .1s;
 }
-#enter {
+._enter {
   background-color: #d9f3e7;
   transition-duration: .1s;
 }
@@ -206,12 +239,6 @@ button {
   .enter {
     width: 480px;
     padding: 10px;
-  }
-  #enter:hover {
-    background-color: #aee7c7;
-  }
-  #register:hover {
-    background-color: #95c8ff;
   }
   input {
     font-size: 16px;
@@ -232,5 +259,35 @@ button {
   .inputs {
     margin: 10px 0 10px 0;
   }
+}
+._enter:hover {
+  background-color: #aee7c7;
+}
+.register:hover {
+  background-color: #95c8ff;
+}
+.b-e {
+  background-color: #2c2c2c;
+}
+.b-h1 {
+  color: #949494;
+}
+.b-inp {
+  background-color: black;
+  color: #949494;
+}
+.b-enter {
+  color: #949494;
+  background-color: black;
+}
+.b-enter:hover {
+  background-color: #003100;
+}
+.b-register {
+  color: #949494;
+  background-color: #131325;
+}
+.b-register:hover {
+  background-color: #2c2c56;
 }
 </style>

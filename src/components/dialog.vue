@@ -1,18 +1,18 @@
 <template>
-  <div class="form">
-    <div @click="backToList" class="back">
+  <div :class="{'d-form': isDark}" class="form">
+    <div :class="{'d-bnt': isDark}" @click="backToList" class="back">
       <img src="@/assets/arrow-left.svg" alt="назад к списку пользователей">
       Назад
     </div>
-    <strong>{{wingman}}</strong>
-    <div class="over" ref="txt">
-      <div class="message-cont">
-        <message :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
+    <strong :class="{'d-str': isDark}">{{wingman}}</strong>
+    <div :class="{'d-form': isDark}" class="over" ref="txt">
+      <div :class="{'d-form': isDark}" class="message-cont">
+        <message :is-dark="isDark" :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
       </div>
     </div>
     <footer>
       <span class="foo">
-        <textarea v-model="text" placeholder="Введите сообщение"/>
+        <textarea :class="{'d-txt' : isDark}" @keydown.ctrl.enter="send" v-model="text" placeholder="Введите сообщение, отправка на Ctrl+Enter."/>
         <img @click="send" class="send" alt="отправить" src="@/assets/send.svg">
       </span>
     </footer>
@@ -31,7 +31,7 @@ export default {
       key: "",
       data: {},
       login: "",
-      text: ""
+      text: "",
     }
   },
   methods: {
@@ -88,7 +88,8 @@ export default {
   },
   props: {
     wingman: String,
-    messages: Object
+    messages: Object,
+    isDark: Boolean
   },
 }
 </script>
@@ -187,5 +188,19 @@ textarea:focus {
 }
 button {
   padding: 0;
+}
+.d-form {
+  background-color: #1e1e1e;
+}
+.d-str {
+  color: #949494;
+  border-bottom: 1px solid darkgrey;
+}
+.d-txt {
+  background-color: #444444;
+  color: #c0c0c0;
+}
+.d-bnt {
+  background-color: #949494;
 }
 </style>
