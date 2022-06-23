@@ -53,6 +53,7 @@ export default {
         time: this.getTime(),
       };
       this.text = "";
+      this.data.push(data);
       this.toDown();
       await fetch('https://serene-spire-46051.herokuapp.com/api/dialogs', {
         method: 'POST',
