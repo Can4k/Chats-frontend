@@ -32,7 +32,7 @@ p {
   margin: 5px;
   padding: 10px 10px 7px 5px;
   border-radius: 10px 10px 10px 0;
-  background-color: #496481;
+  background-color: rgba(82, 107, 187, 0.66);
   color: azure;
   align-self: flex-start;
 }
@@ -41,7 +41,7 @@ p {
   margin: 5px;
   padding: 10px 10px 5px 7px;
   border-radius: 10px 10px 0 10px;
-  background-color: #2490ff;
+  background-color: rgba(36, 144, 255, 0.76);
   color: azure;
   align-self: flex-end;
 }
