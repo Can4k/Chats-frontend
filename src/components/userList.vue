@@ -32,7 +32,7 @@ export default {
   },
   async mounted() {
     this.login = localStorage['login'];
-    setTimeout(() => this.getUserList(), 5000);
+    setTimeout(() => this.getUserList());
   }
 }
 </script>

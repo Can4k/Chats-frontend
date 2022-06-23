@@ -5,8 +5,10 @@
       Назад
     </div>
     <strong>{{wingman}}</strong>
-    <div class="message-cont" ref="txt">
-      <message :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
+    <div class="over" ref="txt">
+      <div class="message-cont">
+        <message :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
+      </div>
     </div>
     <footer>
       <span class="foo">
@@ -51,7 +53,6 @@ export default {
         time: this.getTime(),
       };
       this.text = "";
-      this.data.push(data);
       this.toDown();
       await fetch('https://serene-spire-46051.herokuapp.com/api/dialogs', {
         method: 'POST',
@@ -68,25 +69,25 @@ export default {
       return from > to? to + '$' + from : from + '$' + to;
     },
     toDown() {
-      setTimeout(() => this.$refs.txt.scrollTo(0, 1e16), .3);
+      setTimeout(() => this.$refs.txt.scrollTo(0, 1e16, 1e-10));
     },
     async getMessages(flag = false) {
       let json = await fetch(`https://serene-spire-46051.herokuapp.com/api/dialogs/${this.key}`);
       this.data = await json.json();
-      if (this.data && flag) {
-        setTimeout(() => this.toDown());
+      if (flag && this.data) {
+        this.toDown();
       }
     }
-  },
-  props: {
-    wingman: String,
-    messages: Object
   },
   mounted() {
     this.login = localStorage['login'];
     this.key = this.getKey(this.wingman, this.login);
-    this.getMessages(true)
-    setTimeout(() => this.getMessages(), 5000);
+    this.getMessages(true);
+    setInterval(() => this.getMessages(), 5000);
+  },
+  props: {
+    wingman: String,
+    messages: Object
   },
 }
 </script>
@@ -115,6 +116,10 @@ hr {
   width: 100%;
   margin: 0;
 }
+.over {
+  height: 100%;
+  overflow-y: scroll;
+}
 .form {
   margin-top: 80px;
   position: absolute;
@@ -122,7 +127,8 @@ hr {
   flex-direction: column;
   background-color: white;
   border-radius: 10px;
-  width: 360px;
+  width: 90%;
+  height: 85%;
   left: 50%;
   transform: translate(-50%);
   box-shadow: 0 4px 12px 0 #0d234308;
@@ -132,14 +138,12 @@ hr {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  overflow-y: scroll;
-  max-height: 480px;
   padding: 5px;
   background-color: white;
   margin-top: 0;
   margin-bottom: 10px;
 }
-.message-cont::-webkit-scrollbar {
+.over::-webkit-scrollbar {
   width: 0;
 }
 img {
@@ -163,7 +167,7 @@ strong {
 textarea {
   padding: 7px;
   resize: none;
-  width: 270px;
+  width: 85%;
   height: 50px;
   border: none;
   border-radius: 10px;
@@ -182,15 +186,5 @@ textarea:focus {
 }
 button {
   padding: 0;
-}
-@media screen and (min-width: 700px){
-  .form {
-    width: 600px;
-  }
-  textarea {
-    font-size: 15px;
-    height: 80px;
-    width: 530px;
-  }
 }
 </style>
