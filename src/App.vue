@@ -13,11 +13,11 @@
         <button :class="{'b-register': isBlack}" class="register" @click="register">Зарегестрироваться</button>
       </span>
     </span>
-    <img @click="changeTheme" v-show="this.isBlack" src="@/assets/sun.svg" alt="тема">
-    <img @click="changeTheme" v-show="!this.isBlack" src="@/assets/moon.svg" alt="тема">
+    <img style="background-color: #676767" @click="changeTheme" v-show="this.isBlack" src="@/assets/sun.svg" alt="тема">
+    <img style="background-color: white" @click="changeTheme" v-show="!this.isBlack" src="@/assets/moon.svg" alt="тема">
     <user-information @change_theme="changeTheme" :is-dark="isBlack" @exit="this.exit" v-if="isAuth"/>
     <chat-dialog :is-dark="isBlack" @backToList="backToList" v-if="isDialogOpen" :wingman="this.wingman"/>
-    <user-list :is-dark="isBlack" @openDialog="openDialog" v-if="isAuth && !isDialogOpen"/>
+    <user-list :is-dark="isBlack" v-if="!isDialogOpen && isAuth" @openDialog="openDialog"/>
   </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
         login: this.login,
         password: this.password
       }
-      let response = await fetch('https://serene-spire-46051.herokuapp.com/api/auth', {
+      let response = await fetch('https://murmuring-beyond-69315.herokuapp.com/api/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export default {
         login: this.login,
         password: this.password
       }
-      let response = await fetch('https://serene-spire-46051.herokuapp.com/api/register', {
+      let response = await fetch('https://murmuring-beyond-69315.herokuapp.com/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -160,9 +160,9 @@ img {
   top: 0;  left: 0;
   margin: 5px;
   position: absolute;
-  background-color: lightgray;
   padding: 5px;
-  border-radius: 30px;
+  border-radius: 8px;
+  transition-duration: 1s;
 }
 #app {
   -webkit-font-smoothing: antialiased;
@@ -289,5 +289,19 @@ button {
 }
 .b-register:hover {
   background-color: #2c2c56;
+}
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: translate(-50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%) scale(1);
+  }
 }
 </style>

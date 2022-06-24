@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     async getUserList() {
-      const res = await fetch('https://serene-spire-46051.herokuapp.com/api/users');
+      const res = await fetch('https://murmuring-beyond-69315.herokuapp.com/api/users');
       if (res.ok) {
         this.userList = await res.json();
       } else {
@@ -88,6 +88,25 @@ b {
 }
 b:hover {
   transform: translate(5px);
+}
+
+.loader {
+  width: 18px;
+  margin-left: 10px;
+  animation: bounce 0.5s;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+
+h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media screen and (min-width: 700px){

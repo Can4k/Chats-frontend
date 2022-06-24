@@ -4,7 +4,7 @@
       <img src="@/assets/arrow-left.svg" alt="назад к списку пользователей">
       Назад
     </div>
-    <strong :class="{'d-str': isDark}">{{wingman}}</strong>
+    <strong :class="{'d-str': isDark}">{{wingman}}{{mes}}</strong>
     <div :class="{'d-form': isDark}" class="over" ref="txt">
       <div :class="{'d-form': isDark}" class="message-cont">
         <message :is-dark="isDark" :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
@@ -32,6 +32,7 @@ export default {
       data: {},
       login: "",
       text: "",
+      mes: ""
     }
   },
   methods: {
@@ -55,7 +56,7 @@ export default {
       this.text = "";
       this.data.push(data);
       this.toDown();
-      await fetch('https://serene-spire-46051.herokuapp.com/api/dialogs', {
+      await fetch('https://murmuring-beyond-69315.herokuapp.com/api/dialogs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -73,8 +74,15 @@ export default {
       setTimeout(() => this.$refs.txt.scrollTo(0, 1e16, 1e-10));
     },
     async getMessages(flag = false) {
-      let json = await fetch(`https://serene-spire-46051.herokuapp.com/api/dialogs/${this.key}`);
-      this.data = await json.json();
+      let json = await fetch(`https://murmuring-beyond-69315.herokuapp.com/api/dialogs/${this.key}`);
+      let tmp = await json.json();
+      if (tmp.length < this.data.length) {
+        return;
+      }
+      if (!flag && tmp.length !== this.data.length) {
+        this.mes = " [новое сообщение]"
+      }
+      this.data = tmp;
       if (flag && this.data) {
         this.toDown();
       }
@@ -154,20 +162,23 @@ img {
   cursor: pointer;
 }
 strong {
-  margin-top: 6px;
   font-size: 25px;
-  margin-bottom: 5px;
-  border-bottom: 1px solid gainsboro;
+  padding-top: 5px;
   padding-bottom: 5px;
+  border-radius: 10px 10px 0 0;
+  font-weight: 700;
+  color: #424242;
 }
 .foo {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 10px;
+  padding-top: 10px;
+  border-radius: 0 0 10px 10px;
 }
 textarea {
-  padding: 7px;
+  padding: 10px;
   resize: none;
   width: 85%;
   height: 50px;
@@ -194,7 +205,6 @@ button {
 }
 .d-str {
   color: #949494;
-  border-bottom: 1px solid darkgrey;
 }
 .d-txt {
   background-color: #444444;
@@ -202,5 +212,17 @@ button {
 }
 .d-bnt {
   background-color: #949494;
+}
+@media screen and (min-width: 1000px){
+  strong {
+    font-size: 35px;
+  }
+  .back {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+  .form {
+    width: 60%;
+  }
 }
 </style>
