@@ -93,6 +93,12 @@ export default {
     this.key = this.getKey(this.wingman, this.login);
     this.getMessages(true);
     setInterval(() => this.getMessages(), 5000);
+    const over = document.getElementsByClassName('over')[0];
+    over.addEventListener('scroll', () => {
+      if (over.scrollHeight - over.scrollTop === over.clientHeight) {
+        this.mes = "";
+      }
+    });
   },
   props: {
     wingman: String,
@@ -162,8 +168,10 @@ img {
   cursor: pointer;
 }
 strong {
-  font-size: 25px;
-  padding-top: 5px;
+  padding-right: 10px;
+  text-align: right;
+  font-size: 15px;
+  padding-top: 10px;
   padding-bottom: 5px;
   border-radius: 10px 10px 0 0;
   font-weight: 700;
