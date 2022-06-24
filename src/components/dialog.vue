@@ -79,7 +79,8 @@ export default {
       if (tmp.length < this.data.length) {
         return;
       }
-      if (!flag && tmp.length !== this.data.length) {
+      const over = document.getElementsByClassName('over')[0];
+      if (!flag && tmp.length !== this.data.length && over.scrollHeight - over.scrollTop !== over.clientHeight) {
         this.mes = " [новое сообщение]"
       }
       this.data = tmp;
