@@ -153,12 +153,15 @@ html {
   box-sizing: border-box;
   font-family: Avenir, Helvetica, Arial, sans-serif
 }
+button:hover {
+  cursor: pointer;
+}
 </style>
 
 <style scoped>
 img {
   top: 0;  left: 0;
-  margin: 5px;
+  margin: 8px;
   position: absolute;
   padding: 5px;
   border-radius: 8px;

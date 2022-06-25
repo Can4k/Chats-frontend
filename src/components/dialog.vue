@@ -1,12 +1,11 @@
 <template>
   <div :class="{'d-form': isDark}" class="form">
     <div :class="{'d-bnt': isDark}" @click="backToList" class="back">
-      <img src="@/assets/arrow-left.svg" alt="назад к списку пользователей">
-      Назад
+      <img :class="{'d-img': isDark}" src="@/assets/arrow-left.svg" alt="назад к списку пользователей">
+      <strong :class="{'d-str': isDark}">{{wingman}}<b>{{mes}}</b></strong>
     </div>
-    <strong :class="{'d-str': isDark}">{{wingman}}{{mes}}</strong>
     <div :class="{'d-form': isDark}" class="over" ref="txt">
-      <div :class="{'d-form': isDark}" class="message-cont">
+      <div :style="style" :class="{'d-form': isDark}" class="message-cont">
         <message :is-dark="isDark" :type="d.from !== this.login" :time="d.time" :text="d.text" v-for="d in this.data"></message>
       </div>
     </div>
@@ -32,7 +31,10 @@ export default {
       data: {},
       login: "",
       text: "",
-      mes: ""
+      mes: "",
+      style: {
+        opacity: 0
+      }
     }
   },
   methods: {
@@ -71,7 +73,9 @@ export default {
       return from > to? to + '$' + from : from + '$' + to;
     },
     toDown() {
-      setTimeout(() => this.$refs.txt.scrollTo(0, 1e16, 1e-10));
+      setTimeout(() => this.$refs.txt.scrollTo({
+        top: 10000000,
+      }));
     },
     async getMessages(flag = false) {
       let json = await fetch(`https://murmuring-beyond-69315.herokuapp.com/api/dialogs/${this.key}`);
@@ -85,6 +89,7 @@ export default {
       }
       this.data = tmp;
       if (flag && this.data) {
+        this.style.opacity = 1;
         this.toDown();
       }
     }
@@ -114,15 +119,11 @@ export default {
   cursor: pointer;
 }
 .back {
-  position: absolute;
+  background-color: white;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  justify-content: left;
-  background-color: #f1f1f1;
-  top: 0; left: 0;
-  margin: 7px;
-  border-radius: 8px;
-  padding: 3px 7px 3px 2px;
+  padding: 5px;
 }
 h2 {
   color: black;
@@ -134,6 +135,7 @@ hr {
   margin: 0;
 }
 .over {
+  margin-top: 5px;
   height: 100%;
   overflow-y: scroll;
 }
@@ -151,6 +153,7 @@ hr {
   box-shadow: 0 4px 12px 0 #0d234308;
 }
 .message-cont {
+  transition-duration: .21s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,19 +167,15 @@ hr {
   width: 0;
 }
 img {
-  width: 20px;
-  margin-right: 3px;
+  width: 26px;
   cursor: pointer;
 }
 strong {
-  padding-right: 10px;
-  text-align: right;
-  font-size: 15px;
-  padding-top: 10px;
-  padding-bottom: 5px;
-  border-radius: 10px 10px 0 0;
-  font-weight: 700;
-  color: #424242;
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-weight: 400;
 }
 .foo {
   display: flex;
@@ -204,7 +203,7 @@ textarea:focus {
   padding: 4px;
   background-color: #f1f1f1;
   border: 1px solid #c0c0c0;
-  margin-left: 5px;
+  margin-left: 7px;
 }
 button {
   padding: 0;
@@ -220,18 +219,36 @@ button {
   color: #c0c0c0;
 }
 .d-bnt {
+  background: none;
+}
+.d-img {
   background-color: #949494;
+  border-radius: 7px;
 }
 @media screen and (min-width: 1000px){
   strong {
-    font-size: 35px;
+    font-size: 25px;
   }
   .back {
-    font-size: 20px;
+    font-size: 10px;
     margin-top: 10px;
   }
   .form {
     width: 60%;
   }
+}
+b {
+  color: grey;
+  font-size: 15px;
+  margin-left: 10px;
+}
+.okay-enter-active,
+.okay-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.okay-enter-from,
+.okay-leave-to {
+  opacity: 0;
 }
 </style>
