@@ -115,6 +115,10 @@ b {
   color: #949494;
 }
 
+.d-b:hover {
+  background-color: #1e1e1e;
+}
+
 b:hover {
   background-color: #dcdcdc;
 }

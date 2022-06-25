@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <span :class="{'b-e': isBlack}" class="enter" v-show="!isAuth">
+    <span :class="{'b-e': isBlack}" class="enter" v-show="!isAuth" @keydown.enter="enter">
        <span class="hello">
          <h1 :class="{'b-h1': isBlack}">{{isAuth? `Привет, ${login}!` : 'Вход'}}</h1>
        </span>

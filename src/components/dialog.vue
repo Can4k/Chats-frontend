@@ -13,16 +13,22 @@
       <span class="foo">
         <textarea :class="{'d-txt' : isDark}" @keydown.ctrl.enter="send" v-model="text" placeholder="Введите сообщение, отправка на Ctrl+Enter."/>
         <img @click="send" class="send" alt="отправить" src="@/assets/send.svg">
+        <img :class="{'yel' : isMenu}" @click="isMenu = !isMenu" class="send" alt="смайлики" src="@/assets/smile.svg">
       </span>
     </footer>
+    <transition name="smiles">
+      <smilemenu v-show="isMenu" :is-dark="this.isDark" @addSmile="addSmile"/>
+    </transition>
   </div>
 </template>
 
 <script>
 import message from "@/components/message";
+import Smilemenu from "@/components/smilemenu";
 export default {
   name: "chat-dialog",
   components: {
+    Smilemenu,
     message
   },
   data() {
@@ -34,10 +40,14 @@ export default {
       mes: "",
       style: {
         opacity: 0
-      }
+      },
+      isMenu: false
     }
   },
   methods: {
+    addSmile(data) {
+      this.text += data.code;
+    },
     getTime() {
       let date = new Date();
       let str1 = date.getHours(), str2 = date.getMinutes();
@@ -115,6 +125,9 @@ export default {
 </script>
 
 <style scoped>
+.yel {
+  background-color: #ffcd00 !important;
+}
 .back:hover {
   cursor: pointer;
 }
@@ -153,7 +166,7 @@ hr {
   box-shadow: 0 4px 12px 0 #0d234308;
 }
 .message-cont {
-  transition-duration: .21s;
+  transition: opacity .2s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,7 +201,7 @@ strong {
 textarea {
   padding: 10px;
   resize: none;
-  width: 85%;
+  width: 80%;
   height: 50px;
   border: none;
   border-radius: 10px;
@@ -250,5 +263,20 @@ b {
 .okay-enter-from,
 .okay-leave-to {
   opacity: 0;
+}
+
+.smiles-enter-active {
+  animation: bounce-in 0.5s;
+}
+.smiles-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>
